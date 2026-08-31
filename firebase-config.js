@@ -8,12 +8,12 @@
 //    objeto de configuração e cole exatamente no lugar do objeto abaixo.
 
 const firebaseConfig = {
-  apiKey: "COLE_AQUI_SUA_API_KEY",
-  authDomain: "COLE_AQUI.firebaseapp.com",
-  projectId: "COLE_AQUI_O_PROJECT_ID",
-  storageBucket: "COLE_AQUI.appspot.com",
-  messagingSenderId: "COLE_AQUI",
-  appId: "COLE_AQUI",
+  apiKey: "AIzaSyDzRoQrnXi43eJ3bJHF6ZYOHMrkaUbs8-c",
+  authDomain: "burguer-134a2.firebaseapp.com",
+  projectId: "burguer-134a2",
+  storageBucket: "burguer-134a2.firebasestorage.app",
+  messagingSenderId: "10281038756",
+  appId: "1:10281038756:web:69bef79b0bb3912a4cc731",
 };
 
 firebase.initializeApp(firebaseConfig);
