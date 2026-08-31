@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>95 Burger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="topo">
+  <div class="topo-linha">
+    <img id="logoLoja" class="topo-logo" src="" alt="Logo" onerror="this.style.visibility='hidden'">
+    <div class="topo-info">
+      <h1 class="topo-nome" id="nomeLoja">95 Burger</h1>
+      <div class="topo-status" id="statusLoja"></div>
+    </div>
+  </div>
+  <div class="busca-wrap">
+    <input type="text" id="buscaInput" class="busca-input" placeholder="Buscar no cardápio…">
+  </div>
+  <div class="categorias-scroll" id="categoriasScroll"></div>
+</header>
+
+<main class="container">
+  <div id="listaProdutos"></div>
+  <p class="rodape-marca">Pedido combinado direto com a cozinha pelo WhatsApp · pagamento na entrega</p>
+</main>
+
+<!-- Barra flutuante do carrinho -->
+<div class="barra-carrinho" id="barraCarrinho">
+  <div class="barra-carrinho-esq">
+    <span class="barra-carrinho-badge" id="barraCarrinhoBadge">0</span>
+    <span class="barra-carrinho-texto">Ver carrinho</span>
+  </div>
+  <span class="barra-carrinho-total" id="barraCarrinhoTotal">R$ 0,00</span>
+</div>
+
+<!-- Overlay compartilhado -->
+<div class="overlay" id="overlayGeral"></div>
+
+<!-- Gaveta: personalizar produto -->
+<div class="gaveta" id="gavetaProduto">
+  <div class="gaveta-puxador"></div>
+  <div class="gaveta-corpo" style="position:relative;">
+    <button class="btn-fechar-gaveta" id="btnFecharGavetaProduto" aria-label="Fechar">✕</button>
+    <img class="gaveta-imagem" id="gavetaProdutoImagem" alt="">
+    <h2 class="gaveta-titulo" id="gavetaProdutoTitulo"></h2>
+    <p class="gaveta-desc" id="gavetaProdutoDesc"></p>
+
+    <div class="grupo-extra" id="gavetaProdutoExtrasWrap">
+      <div class="grupo-extra-titulo">Adicionais <span class="grupo-extra-sub">(opcional)</span></div>
+      <div id="gavetaProdutoExtras"></div>
+    </div>
+
+    <div class="grupo-extra">
+      <div class="grupo-extra-titulo">Alguma observação?</div>
+      <textarea class="obs" id="gavetaProdutoObs" placeholder="Ex: sem cebola, ponto da carne, etc."></textarea>
+    </div>
+  </div>
+  <div class="gaveta-rodape">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;">
+      <span style="font-weight:700;">Quantidade</span>
+      <div class="stepper">
+        <button class="stepper-btn" id="stepperMenos" type="button">–</button>
+        <span class="stepper-qtd" id="gavetaProdutoQtd">1</span>
+        <button class="stepper-btn" id="stepperMais" type="button">+</button>
+      </div>
+    </div>
+    <button class="btn btn-primario" id="gavetaProdutoBtnAdicionar">Adicionar</button>
+  </div>
+</div>
+
+<!-- Gaveta: carrinho -->
+<div class="gaveta" id="gavetaCarrinho">
+  <div class="gaveta-puxador"></div>
+  <div class="gaveta-corpo" style="position:relative;">
+    <button class="btn-fechar-gaveta" id="btnFecharGavetaCarrinho" aria-label="Fechar">✕</button>
+    <h2 class="gaveta-titulo">Seu carrinho</h2>
+    <div id="listaItensCarrinho"></div>
+    <div class="linha-resumo"><span>Subtotal</span><span id="resumoSubtotal">R$ 0,00</span></div>
+    <div class="linha-resumo total"><span>Total</span><span id="resumoTotal">R$ 0,00</span></div>
+  </div>
+  <div class="gaveta-rodape">
+    <button class="btn btn-primario" id="btnIrParaCheckout">Continuar</button>
+  </div>
+</div>
+
+<!-- Gaveta: checkout -->
+<div class="gaveta" id="gavetaCheckout">
+  <div class="gaveta-puxador"></div>
+  <div class="gaveta-corpo" style="position:relative;">
+    <button class="btn-fechar-gaveta" id="btnFecharGavetaCheckout" aria-label="Fechar">✕</button>
+    <h2 class="gaveta-titulo">Finalizar pedido</h2>
+    <p class="gaveta-desc">Preencha seus dados — o pedido será enviado direto para o WhatsApp da cozinha. O pagamento é feito na entrega, com o motoboy.</p>
+    <form id="formCheckout">
+      <div class="campo">
+        <label for="checkoutNome">Seu nome</label>
+        <input type="text" id="checkoutNome" required placeholder="Nome completo">
+      </div>
+      <div class="campo">
+        <label for="checkoutTelefone">Seu telefone</label>
+        <input type="tel" id="checkoutTelefone" required placeholder="(00) 00000-0000">
+      </div>
+      <div class="campo">
+        <label for="checkoutEndereco">Endereço de entrega</label>
+        <input type="text" id="checkoutEndereco" required placeholder="Rua, número, bairro, complemento">
+      </div>
+      <div class="campo">
+        <label for="checkoutObs">Observação geral (opcional)</label>
+        <input type="text" id="checkoutObs" placeholder="Ponto de referência, troco, etc.">
+      </div>
+      <button class="btn btn-primario" type="submit" id="btnEnviarPedido">Enviar pedido pelo WhatsApp</button>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

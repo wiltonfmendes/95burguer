@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>95 Burger — Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="admin-body">
+
+<!-- Tela de login -->
+<div class="admin-login-wrap" id="telaLogin">
+  <div class="admin-login-card">
+    <h1>Painel 95 Burger</h1>
+    <p class="admin-card-ajuda">Entre com o e-mail e senha cadastrados no Firebase Authentication.</p>
+    <form id="formLogin">
+      <div class="campo">
+        <label for="loginEmail">E-mail</label>
+        <input type="email" id="loginEmail" required>
+      </div>
+      <div class="campo">
+        <label for="loginSenha">Senha</label>
+        <input type="password" id="loginSenha" required>
+      </div>
+      <button class="btn btn-primario" type="submit">Entrar</button>
+      <p class="erro-msg" id="loginErro"></p>
+    </form>
+  </div>
+</div>
+
+<!-- Painel admin -->
+<div id="telaAdmin" style="display:none;">
+  <div class="admin-topo">
+    <div class="admin-topo-linha">
+      <span class="admin-topo-titulo">Painel · 95 Burger</span>
+      <button class="btn btn-secundario" id="btnSair" style="width:auto; padding:8px 16px;">Sair</button>
+    </div>
+  </div>
+
+  <div class="admin-container">
+    <div class="admin-abas">
+      <button class="admin-aba ativa" data-aba="config" id="aba-config">Configurações da loja</button>
+      <button class="admin-aba" data-aba="categorias" id="aba-categorias">Categorias</button>
+      <button class="admin-aba" data-aba="produtos" id="aba-produtos">Produtos</button>
+    </div>
+
+    <!-- Painel: Configurações -->
+    <div class="admin-painel" id="painel-config">
+      <div class="admin-card">
+        <h3>Dados da loja</h3>
+        <p class="admin-card-ajuda">
+          Para a logo, cole o link de compartilhamento de uma imagem do <strong>Google Drive</strong>
+          (deixe o arquivo como "Qualquer pessoa com o link pode visualizar") ou o link direto de
+          qualquer imagem hospedada na internet (Imgur, por exemplo). O sistema converte automaticamente.
+        </p>
+        <form id="formConfig">
+          <div class="campo">
+            <label for="cfgNome">Nome da loja</label>
+            <input type="text" id="cfgNome" required placeholder="95 Burger">
+          </div>
+          <div class="campo">
+            <label for="cfgWhatsapp">WhatsApp da cozinha (com DDD e código do país)</label>
+            <input type="text" id="cfgWhatsapp" required placeholder="5511999999999">
+          </div>
+          <div class="campo">
+            <label for="cfgLogo">Link da logo (Google Drive ou outra URL)</label>
+            <input type="text" id="cfgLogo" placeholder="https://drive.google.com/file/d/....">
+            <img id="cfgLogoPrevia" class="preview-imagem-pequena" style="display:none;">
+          </div>
+          <div class="campo">
+            <label for="cfgHorario">Texto de horário de funcionamento (opcional)</label>
+            <input type="text" id="cfgHorario" placeholder="Ex: seg a sáb, 18h–23h">
+          </div>
+          <div class="campo" style="display:flex; align-items:center; gap:10px;">
+            <label class="switch" style="margin-bottom:0;">
+              <input type="checkbox" id="cfgAberta" checked>
+              <span class="switch-trilho"></span>
+            </label>
+            <label style="margin-bottom:0;">Loja aberta para pedidos</label>
+          </div>
+          <button class="btn btn-primario" type="submit">Salvar configurações</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Painel: Categorias -->
+    <div class="admin-painel" id="painel-categorias" style="display:none;">
+      <div class="admin-card">
+        <h3 id="tituloFormCategoria">Nova categoria</h3>
+        <p class="admin-card-ajuda">Ex: Hambúrgueres, Marmitas, Cachorro-quente, Bebidas, Drinks.</p>
+        <form id="formCategoria">
+          <div class="linha-flex">
+            <div class="campo" style="flex:2;">
+              <label for="catNome">Nome da categoria</label>
+              <input type="text" id="catNome" required>
+            </div>
+            <div class="campo" style="flex:1;">
+              <label for="catOrdem">Ordem de exibição</label>
+              <input type="number" id="catOrdem" value="0">
+            </div>
+          </div>
+          <button class="btn btn-primario" type="submit" id="btnSalvarCategoria">Adicionar categoria</button>
+        </form>
+      </div>
+      <div class="admin-card">
+        <h3>Categorias cadastradas</h3>
+        <div id="listaCategoriasAdmin"></div>
+      </div>
+    </div>
+
+    <!-- Painel: Produtos -->
+    <div class="admin-painel" id="painel-produtos" style="display:none;">
+      <div class="admin-card">
+        <h3 id="tituloFormProduto">Novo produto</h3>
+        <p class="admin-card-ajuda">
+          Para a imagem, cole o link de compartilhamento do Google Drive — o sistema converte
+          automaticamente para exibição. Em "adicionais", um por linha, no formato
+          <code>Nome | preço</code> (o preço é opcional — deixe em branco para adicional grátis).
+        </p>
+        <form id="formProduto">
+          <div class="campo">
+            <label for="prodNome">Nome do produto</label>
+            <input type="text" id="prodNome" required placeholder="Ex: X-Bacon Artesanal">
+          </div>
+          <div class="campo">
+            <label for="prodDescricao">Descrição</label>
+            <input type="text" id="prodDescricao" placeholder="Ingredientes principais">
+          </div>
+          <div class="linha-flex">
+            <div class="campo">
+              <label for="prodPreco">Preço (R$)</label>
+              <input type="text" id="prodPreco" required placeholder="29,90">
+            </div>
+            <div class="campo">
+              <label for="prodCategoria">Categoria</label>
+              <select id="prodCategoria" required></select>
+            </div>
+          </div>
+          <div class="campo">
+            <label for="prodImagem">Link da imagem (Google Drive ou outra URL)</label>
+            <input type="text" id="prodImagem" placeholder="https://drive.google.com/file/d/....">
+            <img id="prodImagemPrevia" class="preview-imagem-pequena" style="display:none;">
+          </div>
+          <div class="campo">
+            <label for="prodExtrasTexto">Adicionais (um por linha — Nome | preço)</label>
+            <textarea class="obs" id="prodExtrasTexto" placeholder="Bacon extra | 4,00&#10;Ovo | 2,50&#10;Sem cebola"></textarea>
+          </div>
+          <div class="campo" style="display:flex; align-items:center; gap:10px;">
+            <label class="switch" style="margin-bottom:0;">
+              <input type="checkbox" id="prodDisponivel" checked>
+              <span class="switch-trilho"></span>
+            </label>
+            <label style="margin-bottom:0;">Disponível no cardápio</label>
+          </div>
+          <div class="linha-flex">
+            <button class="btn btn-primario" type="submit" id="btnSalvarProduto">Adicionar produto</button>
+            <button class="btn btn-secundario" type="button" id="btnNovoProduto">Limpar / novo</button>
+          </div>
+        </form>
+      </div>
+      <div class="admin-card">
+        <h3>Produtos cadastrados</h3>
+        <div id="listaProdutosAdmin"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toastAdmin"></div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="js/firebase-config.js"></script>
+<script src="js/utils.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
